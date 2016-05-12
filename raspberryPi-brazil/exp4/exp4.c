@@ -28,6 +28,7 @@ performance of the system, especially if using threads.
 #include <wiringPi.h>
 #include <math.h>
 
+//Definição dos pinos GPIO com os headers WiringPi
 #define P1	0
 #define P2 	1
 #define P3 	2
@@ -41,192 +42,133 @@ int flag=0;
 char forma_de_onda='d';
 int frequencia=0;
 int tempo=100;
-int tempos_seno1[16];
-int tempos_seno[16]={43 ,21 ,22, 21 ,19 ,12, 18 ,15 ,52 ,29, 34 ,16, 54 ,29 ,115};
 clock_t tic, toc;
 int i=0;
 int j=0;
 int a;
-int tempos_senox[16]={4, 2, 3, 1, 2, 2, 2, 1, 5, 3, 4, 1, 6, 3, 11};
 // Foi necessário escrever uma funcao especifica para lidar com os tempos
 // menores que 1 ms
 
-void usMicroseconds(int microseconds)
-{
-    long pause;
-    clock_t now,then;
-
-    pause = microseconds*(CLOCKS_PER_SEC/1000000);
-    now = then = clock();
-    while( (now-then) < pause )
-        now = clock();
-
-}
-
-
-
 int main (void){
+      // Configuração das 8 portas iniciais do GPIO, utilizadas pela função digitalWriteByte
+      wiringPiSetup();
+      pinMode(P1, OUTPUT);
+      pinMode(P2, OUTPUT);
+      pinMode(P3, OUTPUT);
+      pinMode(P4, OUTPUT);
+      pinMode(P5, OUTPUT);
+      pinMode(P6, OUTPUT);
+      pinMode(P7, OUTPUT);
+      pinMode(P8, OUTPUT);
 
-wiringPiSetup();
-pinMode(P1, OUTPUT);
-pinMode(P2, OUTPUT);
-pinMode(P3, OUTPUT);
-pinMode(P4, OUTPUT);
-pinMode(P5, OUTPUT);
-pinMode(P6, OUTPUT);
-pinMode(P7, OUTPUT);
-pinMode(P8, OUTPUT);
+      //Teste do GPIO e da função digitalWriteByte
+      //Removido do programa para focar no fluxo solicitado para o projeto.
+      /*
+      digitalWrite(P1, HIGH);
+      digitalWrite(P2, HIGH);
+      digitalWrite(P3, HIGH);
+      digitalWrite(P4, HIGH);
+      digitalWrite(P5, HIGH);
+      digitalWrite(P6, HIGH);
+      digitalWrite(P7, HIGH);
+      digitalWrite(P8, HIGH);
 
-digitalWrite(P1, HIGH);
-digitalWrite(P2, HIGH);
-digitalWrite(P3, HIGH);
-digitalWrite(P4, HIGH);
-digitalWrite(P5, HIGH);
-digitalWrite(P6, HIGH);
-digitalWrite(P7, HIGH);
-digitalWrite(P8, HIGH);
-/*
-//delay(6000);
+      delay(6000);
       digitalWriteByte(0);
-scanf("%d", &i);
-//delay(6000);
+      scanf("%d", &i);
       digitalWriteByte();
-//delay(6000);
-scanf("%d", &i);
+      scanf("%d", &i);
       digitalWriteByte();
-scanf("%d", &i);
-*/
+      scanf("%d", &i);
 
-/*
-for (i=0;i<=15;i++){
-      digitalWriteByte(i);
-printf("%d\n", i);
-scanf("%d", &j);
-
-}*/
-
-     digitalWriteByte(8);
-
-
-//Escolha da Frequencia e do Tipo de onda
-printf("----------Conversor D-A.--------\n");
-while (flag != 1){
-    printf("Escolha a forma de onda desejada (T para Triangular e S para senoidal):");
-    scanf("%c", &forma_de_onda);
-    if (forma_de_onda == 'T'){ flag = 1; }
-    else if (forma_de_onda == 'S') { flag =1; }
-    else printf("Digite um valor válido - T/S\n");
-	printf("forma de onda: %c\n", forma_de_onda);
-}
-
-flag = 0;
-while (flag != 1){
-    printf("Escolha o valor desejado para a frequencia (500 ou 5000 Hz):");
-    scanf("%d", &frequencia);
-    printf("\nfrequencia escolhida: %d\n", frequencia);
-
-    if (frequencia == 500){
-        flag = 1;
-	printf("1 flag = %d\n", flag);
-        tempo= 60;
-	frequencia = frequencia*155500/6/500;
-     }
-    else if (frequencia == 5000) {
-        flag =1;
-	printf("2 flag = %d\n", flag);
-        tempo = 2;
-	frequencia = frequencia*155500/6/500;
+      for (i=0;i<=15;i++){
+            digitalWriteByte(i);
+            printf("%d\n", i);
+            scanf("%d", &j);
       }
-    else {printf("Digite um valor válido - 500/5000 Hz\n");}
-
-printf("frequencia escolhida: %d\n", frequencia);
-
-}
-
-
-
-if (forma_de_onda == 'T'){
-//Implementacao do gerador de onda
-while(1){
-    tic = clock();
-    for(i=0; i<=15; i++){
-      //printf("%d\n", i);
-      if (forma_de_onda == 'T') delayMicroseconds(tempo); //us
-      else {
-
-             if (frequencia ==500) delayMicroseconds(tempos_seno[i]); //us
-	     else delayMicroseconds(tempos_senox[i]); //us
-	}
-
       digitalWriteByte(i);
-      toc = (clock()-tic)/CLOCKS_PER_SEC*1000000;
-      //printf("%d s - i = %d\n", toc, i);
-    }
 
-    for( i=15; i>=0; i--){
-     //printf("%d\n", i);
-      if (forma_de_onda == 'T') delayMicroseconds(tempo); //us
-      else {
-             if (frequencia ==500) delayMicroseconds(tempos_seno[i]); //us
-	     else delayMicroseconds(tempos_senox[i]); //us
-	}
-      digitalWriteByte(i);
-      toc = (clock()-tic)/CLOCKS_PER_SEC*1000000;
-      //printf("%d s - i = %d\n", toc, i);
-    }
+      // Fim da zona de testes  GPIO
+      */
 
-  } // end while
-}
-
-else{
-	i=0;
-	j=0;
-	flag=0;
-	while(1){
-
-		digitalWriteByte(i);
-		delayMicroseconds(1);
-		j++;
-		a = (int)roundf(7*cos(2*3.1415926*frequencia*j)+7);
-//printf("a= %d i=%d\n",  a, i );
-
-		while( i<=14){
-
-			delayMicroseconds(1);
-			j++;
-			a = (int)roundf(7*cos(2*3.1415926*frequencia*j)+7);
-//printf("a= %d i=%d\n",  a, i );
-			digitalWriteByte(i);
+      digitalWriteByte(8);
 
 
-			if(a>=i) {
+      //Escolha da Frequencia e do Tipo de onda
+      printf("----------Conversor D-A.--------\n");
 
-			i++;
-//			printf("i++=   %d\n", i );
+      //Escolha da forma da onda - T ou S apenas
+      while (flag != 1){
+          printf("Escolha a forma de onda desejada (T para Triangular e S para senoidal):");
+          scanf("%c", &forma_de_onda);
+          if (forma_de_onda == 'T'){ flag = 1; }
+          else if (forma_de_onda == 'S') { flag =1; }
+          else printf("Digite um valor válido - T/S\n");
+      	  printf("forma de onda: %c\n", forma_de_onda);
+       }
 
-			}
-		}
+      flag = 0;
 
-		while( i>=0){
+      //Escolha da frequencia, entre 500 e 5000Hz.
+      while (flag != 1){
+          printf("Escolha o valor desejado para a frequencia (500 ou 5000 Hz):");
+          scanf("%d", &frequencia);
+          printf("\nfrequencia escolhida: %d\n", frequencia);
+          if (frequencia == 500){
+              flag = 1;
+              tempo= 60;
+      	      frequencia = frequencia*155500/6/500;
+           }
+          else if (frequencia == 5000) {
+              flag =1;
+              tempo = 2;
+      	      frequencia = frequencia*155500/6/500;
+            }
+          else { printf("Digite um valor válido - 500/5000 Hz\n"); }
+          printf("frequencia escolhida: %d\n", frequencia);
+      }
 
-			delayMicroseconds(1);
-			j++;
-			a = (int)roundf(7*cos(2*3.1415926*frequencia*j)+7);
-//printf("a= %d i=%d\n",  a, i );
-			digitalWriteByte(i);
-			if(a<=i) {
+      //Implementacao do gerador de onda
+      //Onda triangular
+      if (forma_de_onda == 'T'){
+            while(1){
+                for(i=0; i<=15; i++){
+                  if (forma_de_onda == 'T') delayMicroseconds(tempo); //us
+                  digitalWriteByte(i);
+                } //onda descendente
+                for( i=15; i>=0; i--){
+                  if (forma_de_onda == 'T') delayMicroseconds(tempo); //us
+                  digitalWriteByte(i);
+                } // onda ascendente
+            } // end while
+      } // end geração de onda triangular
 
-			i--;
-//			printf("i--=   %d\n", i );
-			}
-		}
-		/*if( a > i && i<14)  {  i++; printf("i++=   %d\n", i ); }
-		else if ( i==14){ flag = 1;}
-		else if ( flag ==1 && a < i && i>0){  i--;  printf("i--=   %d\n", i );}
-		else if (flag ==1 && i==0) {flag=0;}*/
+      //Onda senoidal
+      else{
+        //reinicamos todas as variáveis
+      	i=0;
+      	j=0;
+      	flag=0;
 
-	} //end while
-
-} // end else
-
-}
+      	while(1){
+      		digitalWriteByte(i);
+      		delayMicroseconds(1);
+      		j++;
+      		a = (int)roundf(7*cos(2*3.1415926*frequencia*j)+7);
+      		while( i<=14){
+          			delayMicroseconds(1);
+          			j++;
+          			a = (int)roundf(7*cos(2*3.1415926*frequencia*j)+7);
+          			digitalWriteByte(i);
+          			if(a>=i) {		i++;  }
+      		} // onda descendente
+      		while( i>=0){
+          			delayMicroseconds(1);
+          			j++;
+          			a = (int)roundf(7*cos(2*3.1415926*frequencia*j)+7);
+          			digitalWriteByte(i);
+          			if(a<=i) {  i--; }
+          		} // onda descendente
+      	} //end while
+      } // end onda senoidal
+} // end main
