@@ -1,6 +1,9 @@
 /* Experimento 4 - Conversor Digital-Analogico
 Grupo 8 - Placa 9
 
+O esquemático do circuito a ser implementado está disponível em:
+https://s3-sa-east-1.amazonaws.com/haredega-git-imgs/esquematico-exp4.JPG
+
 To do - Utilizar pinos 11, 12, 13 e 15 (GPIO0 a GPIO3) da RaspberryPi
 
 Funções úteis ao projeto:
@@ -11,7 +14,7 @@ It's the fastest way to set all 8 bits at once to a particular value,
 although it still takes two write operations to the Pi's GPIO hardware.
 
 void delayMicroseconds (unsigned int howLong)
-This causes program execution to pause for at least howLong microseconds. 
+This causes program execution to pause for at least howLong microseconds.
 Due to the multi-tasking nature of Linux it could be longer. Note that the maximum
 delay is an unsigned 32-bit integer microseconds or approximately 71 minutes.
 Delays under 100 microseconds are timed using a hard-coded loop continually polling
@@ -25,7 +28,7 @@ performance of the system, especially if using threads.
 #include <wiringPi.h>
 #include <math.h>
 
-#define P1	0 
+#define P1	0
 #define P2 	1
 #define P3 	2
 #define P4 	3
@@ -147,14 +150,14 @@ if (forma_de_onda == 'T'){
 while(1){
     tic = clock();
     for(i=0; i<=15; i++){
-      //printf("%d\n", i);	
+      //printf("%d\n", i);
       if (forma_de_onda == 'T') delayMicroseconds(tempo); //us
       else {
-	
+
              if (frequencia ==500) delayMicroseconds(tempos_seno[i]); //us
 	     else delayMicroseconds(tempos_senox[i]); //us
 	}
-     
+
       digitalWriteByte(i);
       toc = (clock()-tic)/CLOCKS_PER_SEC*1000000;
       //printf("%d s - i = %d\n", toc, i);
@@ -187,7 +190,7 @@ else{
 		a = (int)roundf(7*cos(2*3.1415926*frequencia*j)+7);
 //printf("a= %d i=%d\n",  a, i );
 
-		while( i<=14){ 
+		while( i<=14){
 
 			delayMicroseconds(1);
 			j++;
@@ -203,8 +206,8 @@ else{
 
 			}
 		}
-		
-		while( i>=0){ 
+
+		while( i>=0){
 
 			delayMicroseconds(1);
 			j++;
