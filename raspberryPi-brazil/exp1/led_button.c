@@ -3,6 +3,9 @@
 #Grupo 6
 #Experimento 1
 # Blink com LED
+Os esquematicos referentes a este exercicio estão disponíveis em:
+https://s3-sa-east-1.amazonaws.com/haredega-git-imgs/led-exp1.png
+https://s3-sa-east-1.amazonaws.com/haredega-git-imgs/botoeira-exp1.png
 */
 
 #include <stdio.h>
@@ -41,7 +44,6 @@ int main (void)
         delay (500) ;
         }
     i++;
-    }  
+    }
   return 0 ;
 }
-

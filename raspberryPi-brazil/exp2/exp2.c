@@ -1,4 +1,12 @@
-/* Implementação do termostato */
+/* Experimento 2 - Implementação do termostato
+Grupo 8 - Placa 9
+
+Os diagramas referentes a este experimento podem ser vistos em:
+https://s3-sa-east-1.amazonaws.com/haredega-git-imgs/Relay-exp22.jpg
+https://s3-sa-east-1.amazonaws.com/haredega-git-imgs/condicionador-exp2.JPG
+// Atenção! Houve modificações no esquemático de condicionamento durante a realização do projeto.
+
+*/
 
 #include <stdio.h>
 #include <math.h>
@@ -34,7 +42,7 @@ int main (void){
 
 	delay(2000);
 
-	 
+
     while(1){
             total = 0;
             high = 0;
@@ -44,14 +52,14 @@ int main (void){
             for(cnt; cnt<=200; cnt++){
                 total++;
                 input = digitalRead (PWM) ;  // On
-//printf("PWM: %d\n", input);                
+//printf("PWM: %d\n", input);
 
                 if (input == TRUE) high++;
                 delay (5);  // mS
             }
 
 printf("Duty: %d / %d; count: %d \n", high, total, cnt);
-            
+
             duty = (double)high/(double)total;
 
 

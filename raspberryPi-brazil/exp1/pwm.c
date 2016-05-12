@@ -3,6 +3,9 @@
 #Grupo 6
 #Experimento 1
 # Leitura do PWM
+
+O esquematico referente a este exercício esta disponível em :
+https://s3-sa-east-1.amazonaws.com/haredega-git-imgs/pwm-exp1.png
 */
 
 
@@ -27,8 +30,8 @@ int main (void)
 total = 0;
 high = 0;
   for (;;)
-  { 
-    total++;  
+  {
+    total++;
     input = digitalRead (PWM) ;  // On
     if (input == TRUE) {high++;}
     if (high == 0) {duty = 0;}
